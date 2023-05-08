@@ -42,5 +42,5 @@ runs:
       run: |
         git config --local user.email "action@github.com"
         git config --local user.name "GitHub Action"
-        git add */views/*.nt */README.md
+        git add views/*.nt README.md
         git diff-index --quiet HEAD . || git commit -m "Collate and summarize packages"
