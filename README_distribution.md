@@ -24,4 +24,4 @@
 - Anderson_Promoters_in_vector_Anderson_Promoters_in_vector_ins_BBa_J23118
 - Anderson_Promoters_in_vector_Anderson_Promoters_in_vector_ins_BBa_J23119
 
-_Note: automatically generated from distribution SBOL file; do not edit_
+_Note: automatically generated from distribution SBOL file; do not edit
