@@ -105,6 +105,7 @@ def expand_build_plan(package: str) -> sbol3.Document:
     :return: Updated document
     """
     path = os.path.join(package, EXPORT_DIRECTORY, SBOL_PACKAGE_NAME)
+    print(path)
     doc = sbol3.Document()
     doc.read(path)
 
