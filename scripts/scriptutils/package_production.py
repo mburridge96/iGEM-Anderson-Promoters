@@ -156,7 +156,7 @@ def expand_build_plan(package: str) -> sbol3.Document:
     return doc
 
 
-def build_distribution(root: str, packages: list[str]) -> sbol3.Document:
+def build_distribution(root: str, package: str) -> sbol3.Document:
     """Given a package specification and an inventory of parts, unify them into a complete SBOL3 package & write it out
 
     :param root: location for distribution
@@ -175,24 +175,24 @@ def build_distribution(root: str, packages: list[str]) -> sbol3.Document:
     complete_build_set = set()
 
     # copy the materials from every package into it
-    for package in packages:
-        # get fully-assembled package document
-        import_doc = sbol3.Document()
-        import_doc.read(os.path.join(root, EXPORT_DIRECTORY, SBOL_PACKAGE_NAME))
 
-        # copy over all the objects
-        print(f'  Importing {len(import_doc.objects)} objects from package {package}')
-        for o in import_doc.objects:
-            if o.identity in (o.identity for o in doc.objects):
-                continue  # TODO: add a more principled way of handling duplicates
-            o.copy(doc)
+    # get fully-assembled package document
+    import_doc = sbol3.Document()
+    import_doc.read(os.path.join(root, EXPORT_DIRECTORY, SBOL_PACKAGE_NAME))
 
-        # add materials to the members for the build plan
-        import_build_plan = import_doc.find(BUILD_PRODUCTS_COLLECTION)
-        if not import_build_plan:
-            raise ValueError(f'Could not locate build plan for package {package_stem(package)}')
-        print(f'  Importing build plan with {len(import_build_plan.members)} samples')
-        complete_build_set |= {str(m) for m in import_build_plan.members}
+    # copy over all the objects
+    print(f'  Importing {len(import_doc.objects)} objects from package {package}')
+    for o in import_doc.objects:
+        if o.identity in (o.identity for o in doc.objects):
+            continue  # TODO: add a more principled way of handling duplicates
+        o.copy(doc)
+
+    # add materials to the members for the build plan
+    import_build_plan = import_doc.find(BUILD_PRODUCTS_COLLECTION)
+    if not import_build_plan:
+        raise ValueError(f'Could not locate build plan for package {package_stem(package)}')
+    print(f'  Importing build plan with {len(import_build_plan.members)} samples')
+    complete_build_set |= {str(m) for m in import_build_plan.members}
 
     # set the distribution build plan contents
     print(f'Distribution build plan specifies {len(complete_build_set)} samples')
@@ -218,7 +218,7 @@ def extract_synthesis_files(root: str, doc: sbol3.Document) -> sbol3.Document:
     """
     # get the collection of linear build products - the things to actually be synthesized
     print(f'Exporting files for synthesis')
-    build_plan = doc.find(f'{DISTRIBUTION_NAMESPACE}/{BUILD_PRODUCTS_COLLECTION}')
+    build_plan = doc.find(f'{DISTRIBUTION_NAMESPACE}{BUILD_PRODUCTS_COLLECTION}')
     if not build_plan or not isinstance(build_plan, sbol3.Collection):
         raise ValueError(f'Document does not contain linear products collection "{BUILD_PRODUCTS_COLLECTION}"')
 
