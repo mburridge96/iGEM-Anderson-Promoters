@@ -8,4 +8,4 @@ on:
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:   
   workflow:
-    uses: mburridge96/iGEM-Plant-Parts/.github/workflows/packaging.yml@master
+    uses: mburridge96/iGEM-Plant-Parts/.github/workflows/packaging.yml@inherit_workflow
